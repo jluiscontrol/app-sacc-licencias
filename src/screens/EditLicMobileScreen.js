@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomAppBar from "../components/CustomAppBar";
 import CustomButton from "../components/CustomButton";
-import { TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import instance from "../utils/Instance";
+import { ScrollView } from "react-native";
 
 export default function EditLicMobileScreen() {
   const route = useRoute();
@@ -47,92 +55,105 @@ export default function EditLicMobileScreen() {
           item?.ruc ? (item.descripcion ?? "").toUpperCase() : "Nueva Licencia"
         }
       />
-      <View style={styles.container}>
-        <View
-          style={{
-            width: "100%",
-          }}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.clave}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, clave: text })
-            }
-            label={"Clave"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.client_id}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, client_id: text })
-            }
-            label={"Client ID"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.client_password}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, client_password: text })
-            }
-            label={"Client Password"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.descripcion}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, descripcion: text })
-            }
-            label={"Descripción"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.referencia}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, referencia: text })
-            }
-            label={"Referencia"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.ruc}
-            onChangeText={(text) => setFormFields({ ...formFields, ruc: text })}
-            label={"RUC"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.ruta}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, ruta: text })
-            }
-            label={"Ruta"}
-          />
-          <View style={{ height: 20 }} />
-          <CustomButton
-            onPress={handleSave}
-            title={item?.ruc ? "Actualizar" : "Crear"}
-          />
-        </View>
-      </View>
+          <View style={styles.container}>
+            <View
+              style={{
+                width: "100%",
+                padding: 12,
+              }}
+            >
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.clave}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, clave: text })
+                }
+                label={"Clave"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.client_id}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, client_id: text })
+                }
+                label={"Client ID"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.client_password}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, client_password: text })
+                }
+                label={"Client Password"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.descripcion}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, descripcion: text })
+                }
+                label={"Descripción"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.referencia}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, referencia: text })
+                }
+                label={"Referencia"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.ruc}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, ruc: text })
+                }
+                label={"RUC"}
+              />
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.ruta}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, ruta: text })
+                }
+                label={"Ruta"}
+              />
+              <View style={{ height: 20 }} />
+              <Button mode="contained" onPress={handleSave}>
+                {item?.ruc ? "Actualizar" : "Crear"}
+              </Button>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    paddingHorizontal: 20,
+    margin: 12,
+    backgroundColor: "white",
+    borderRadius: 12,
   },
   textInput: {
     backgroundColor: "white",
-    marginTop: 15,
+    marginBottom: 10,
   },
 });

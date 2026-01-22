@@ -1,9 +1,16 @@
-import { View, Text, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomAppBar from "../components/CustomAppBar";
-import { TextInput } from "react-native-paper";
-import CustomButton from "../components/CustomButton";
+import { Button, TextInput } from "react-native-paper";
 import instance from "../utils/Instance";
 
 export default function EditLicWebScreen() {
@@ -45,67 +52,79 @@ export default function EditLicWebScreen() {
             : "Nueva Licencia"
         }
       />
-      <View style={styles.container}>
-        <View
-          style={{
-            width: "100%",
-          }}
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
         >
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.client_id}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, client_id: text })
-            }
-            label={"Client ID"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.meses}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, meses: text })
-            }
-            label={"Meses"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.fechainstalacion}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, fechainstalacion: text })
-            }
-            label={"Fecha Instalación"}
-          />
-          <TextInput
-            style={styles.textInput}
-            mode="outlined"
-            value={formFields.fechapago}
-            onChangeText={(text) =>
-              setFormFields({ ...formFields, fechapago: text })
-            }
-            label={"Fecha Pago"}
-          />
-          <View style={{ height: 20 }} />
-          <CustomButton
-            onPress={handleSave}
-            title={item?.id ? "Actualizar" : "Crear"}
-          />
-        </View>
-      </View>
+          <View style={styles.container}>
+            <View style={{ width: "100%", padding: 12 }}>
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.client_id}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, client_id: text })
+                }
+                label={"Client ID"}
+              />
+
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.meses}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, meses: text })
+                }
+                label={"Meses"}
+              />
+
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.fechainstalacion}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, fechainstalacion: text })
+                }
+                label={"Fecha Instalación"}
+              />
+
+              <TextInput
+                style={styles.textInput}
+                mode="outlined"
+                value={formFields.fechapago}
+                onChangeText={(text) =>
+                  setFormFields({ ...formFields, fechapago: text })
+                }
+                label={"Fecha Pago"}
+              />
+
+              <View style={{ height: 20 }} />
+
+              <Button mode="contained" onPress={handleSave}>
+                {item?.id ? "Actualizar" : "Crear"}
+              </Button>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    paddingHorizontal: 20,
+    margin: 12,
+    backgroundColor: "white",
+    borderRadius: 12,
   },
   textInput: {
     backgroundColor: "white",
-    marginTop: 15,
+    marginBottom: 10,
   },
 });

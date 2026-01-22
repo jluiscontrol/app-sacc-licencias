@@ -4,8 +4,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   RefreshControl,
+  Animated,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomAppBar from "../components/CustomAppBar";
 import Loader from "../components/Loader";
 import { FlashList } from "@shopify/flash-list";
@@ -29,6 +30,7 @@ export default function LicenciasMobileScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
 
+  const searchHeight = useRef(new Animated.Value(0)).current;
   useFocusEffect(
     React.useCallback(() => {
       setIsRefresh((prev) => !prev);
@@ -58,6 +60,29 @@ export default function LicenciasMobileScreen() {
     }
   }, [searchText, data]);
 
+  const openSearch = () => {
+    setShowSearch(true);
+
+    Animated.timing(searchHeight, {
+      toValue: 70,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const closeSearch = () => {
+    Animated.timing(searchHeight, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: false,
+    }).start(({ finished }) => {
+      if (finished) {
+        setShowSearch(false);
+        setSearchText("");
+      }
+    });
+  };
+
   const renderRightActions = (item) => {
     return (
       <TouchableOpacity
@@ -72,10 +97,23 @@ export default function LicenciasMobileScreen() {
     );
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
+    const isFirst = index === 0;
+    const isLast = index === filteredData.length - 1;
     return (
       <Swipeable renderRightActions={() => renderRightActions(item)}>
-        <View style={styles.licenciaItem}>
+        <View
+          style={{
+            backgroundColor: "white",
+            borderTopLeftRadius: isFirst ? 18 : 5,
+            borderTopRightRadius: isFirst ? 18 : 5,
+            borderBottomLeftRadius: isLast ? 18 : 5,
+            borderBottomRightRadius: isLast ? 18 : 5,
+            marginBottom: 5,
+            paddingVertical: 14,
+            paddingHorizontal: 12,
+          }}
+        >
           <Text style={{ fontWeight: "bold", fontSize: 16 }}>
             {(item.descripcion ?? "").toUpperCase()}
           </Text>
@@ -99,37 +137,35 @@ export default function LicenciasMobileScreen() {
         rightIcon={showSearch ? "close" : "magnify"}
         onPressRightIcon={() => {
           if (showSearch) {
-            setSearchText("");
-            setShowSearch(false);
+            closeSearch();
           } else {
-            setShowSearch(true);
+            openSearch();
           }
         }}
       />
-      {showSearch && (
-        <View
-          style={{
-            backgroundColor: "white",
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            borderBottomWidth: 1,
-            borderColor: "#ccc",
-          }}
-        >
-          <TextInput
-            placeholder="Buscar Licencia..."
+      <Animated.View style={{ height: searchHeight, overflow: "hidden" }}>
+        {showSearch && (
+          <Searchbar
+            placeholder="Buscar viaje..."
             value={searchText}
             onChangeText={setSearchText}
             autoFocus
-            mode="outlined"
+            onClearIconPress={closeSearch}
+            style={{
+              backgroundColor: "white",
+              marginHorizontal: 12,
+              marginTop: 12,
+            }}
           />
-        </View>
-      )}
+        )}
+      </Animated.View>
+
       <FlashList
         data={filteredData}
         renderItem={renderItem}
         estimatedItemSize={118}
         keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{ padding: 12, flexGrow: 1 }}
         refreshControl={
           <RefreshControl
             refreshing={isLoaging}
@@ -153,13 +189,14 @@ const styles = StyleSheet.create({
   },
   swipeable: {
     backgroundColor: PRIMARY_COLOR,
-    marginTop: 15,
-    marginHorizontal: 10,
+    height: "90%",
+    marginLeft: 5,
     padding: 15,
     borderRadius: 10,
-    width: 100,
+    width: 90,
     alignContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
   },
 });

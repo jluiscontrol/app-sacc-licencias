@@ -157,7 +157,7 @@ export default function LoginScreen() {
           <Loader loading={isLoading} />
           <Image
             source={require("../../assets/images/logo_empresa.png")}
-            style={{ width: 400, height: 200 }}
+            style={{ width: 300, height: 200 }}
             resizeMode="contain"
           />
           {showForm && (
@@ -196,7 +196,13 @@ export default function LoginScreen() {
                   style={{ backgroundColor: "white" }}
                 />
               </View>
-              <CustomButton onPress={handleLogin} title={"LOGIN"} />
+              <Button
+                style={{ paddingHorizontal: 20, marginTop: 10 }}
+                mode="contained"
+                onPress={handleLogin}
+              >
+                Iniciar Sesión
+              </Button>
               {canUseBiometric && (
                 <TouchableOpacity
                   onPress={() => setShowForm(false)}

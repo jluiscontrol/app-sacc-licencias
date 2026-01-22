@@ -6,12 +6,13 @@ import {
 import RootNavigator from "./src/navigators/RootNavigator";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
+import { PRIMARY_COLOR } from "./src/utils/colors";
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#d5a203",
+    primary: PRIMARY_COLOR,
     secondary: "#947415",
     secondaryContainer: "#e6b31e",
     onSecondaryContainer: "white",

@@ -149,7 +149,14 @@ export default function ReportScreen() {
         center
         onPressBackButton={() => navigation.goBack()}
       />
-      <View style={{ padding: 16 }}>
+      <View
+        style={{
+          margin: 12,
+          backgroundColor: "white",
+          borderRadius: 12,
+          padding: 12,
+        }}
+      >
         <TouchableOpacity
           onPress={() => setShowPicker({ visible: true, field: "desde" })}
         >
@@ -177,8 +184,14 @@ export default function ReportScreen() {
             />
           </View>
         </TouchableOpacity>
+        <Button
+          style={{ marginTop: 12 }}
+          mode="contained"
+          onPress={() => getInformation()}
+        >
+          Buscar
+        </Button>
 
-        <CustomButton title={"Buscar"} onPress={() => getInformation()} />
         {showPicker.visible && Platform.OS === "android" && (
           <RNDateTimePicker
             mode="date"
@@ -261,6 +274,10 @@ export default function ReportScreen() {
               color: "black",
               textAlign: "center",
               paddingHorizontal: 10,
+              backgroundColor: "white",
+              borderRadius: 12,
+              padding: 12,
+              margin: 12,
             }}
           >
             No hay licencias que vencen entre las fechas seleccionadas
